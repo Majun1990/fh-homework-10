@@ -4,7 +4,8 @@ module API
 
     # GET /api/players
     def index
-      # implement your code here
+      players = Player.all
+      render json: {status: 'success', data:players},status: 200
     end
 
     # GET /api/players/1
