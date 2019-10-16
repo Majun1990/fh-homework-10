@@ -23,7 +23,7 @@ position = [
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     email: Faker::Internet.email,
-    age: Faker::Number.between(from: 1, to: 100),
+    age: Faker::Number.digit,
     position: position.sample
 )
 end
