@@ -24,6 +24,6 @@ position = [
     last_name: Faker::Name.last_name,
     email: Faker::Internet.email,
     age: Faker::Number.digit,
-    position: position.sample
+    position: position.sample,
 )
 end
