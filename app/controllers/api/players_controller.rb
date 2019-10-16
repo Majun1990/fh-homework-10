@@ -10,22 +10,45 @@ module API
 
     # GET /api/players/1
     def show
-      # implement your code here
+      @player = Player.find(params[:id])
+      if @player.present?
+        render json: {status: 'success', data:@player},status: 200
+      else
+        render json: {status: 'unprocessable entity', data:@player.errors},status: 422 
+      end
     end
 
     # POST /api/players
     def create
-      # implement your code here
+      @player = Player.new(player_params)
+      if 
+        @player.save
+        render json: {status: 'success', data:@player},status: 201
+      else
+        render json: {status: 'unprocessable entity', data:@player.errors},status: 422
+      end
     end
 
     # PATCH/PUT /api/players/1
     def update
-      # implement your code here
+      @player = Player.find(params[:id])
+      if 
+        @player.update_attributes(player_params)
+        render json: {status: 'success', data:@player},status: 200
+      else
+        render json: {status: 'unprocessable entity', data:@player.errors},status: 422
+      end
     end
 
     # DELETE /api/players/1
     def destroy
-      # implement your code here
+      @player = Player.find(params[:id])
+      if
+        @player.destroy
+        render json: {status: 'success', data:@player},status: 200
+      else
+        render json: {status: 'unprocessable entity', data:@player.errors},status: 422
+      end
     end
 
     private
