@@ -1,6 +1,6 @@
 require "rails_helper"
-
-RSpec.describe TeamsController, type: :routing do
+module API
+  describe TeamsController, type: :routing do
   describe "routing" do
     it "routes to #index" do
       expect(:get => "/teams").to route_to("teams#index")
@@ -27,4 +27,5 @@ RSpec.describe TeamsController, type: :routing do
       expect(:delete => "/teams/1").to route_to("teams#destroy", :id => "1")
     end
   end
+end
 end

@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  resources :games
-  resources :teams
   namespace :api do
     resources :players
+    resources :games
+    resources :teams
   end
 
   root to: 'api/players#index'

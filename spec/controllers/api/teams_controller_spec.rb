@@ -22,18 +22,18 @@ require 'rails_helper'
 # expectations of assigns and templates rendered. These features have been
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
-
-RSpec.describe TeamsController, type: :controller do
+module API
+  describe TeamsController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # Team. As you add validations to Team, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    skip(name: "Tigers")
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    skip(name: "")
   }
 
   # This should return the minimal set of values that should be in the session
@@ -43,6 +43,7 @@ RSpec.describe TeamsController, type: :controller do
 
   describe "GET #index" do
     it "returns a success response" do
+      valid_attributes = {name: "Eagles"}
       team = Team.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
@@ -51,6 +52,7 @@ RSpec.describe TeamsController, type: :controller do
 
   describe "GET #show" do
     it "returns a success response" do
+      valid_attributes = {name: "Eagles"}
       team = Team.create! valid_attributes
       get :show, params: {id: team.to_param}, session: valid_session
       expect(response).to be_successful
@@ -60,23 +62,23 @@ RSpec.describe TeamsController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Team" do
+        valid_attributes = {name: "Eagles"}
         expect {
           post :create, params: {team: valid_attributes}, session: valid_session
         }.to change(Team, :count).by(1)
       end
 
       it "renders a JSON response with the new team" do
-
+        valid_attributes = {name: "Eagles"}
         post :create, params: {team: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(team_url(Team.last))
       end
     end
 
     context "with invalid params" do
       it "renders a JSON response with errors for the new team" do
-
+        invalid_attributes = {name: ""}
         post :create, params: {team: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -87,17 +89,19 @@ RSpec.describe TeamsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        new_attributes = {name: "Hawks"}
       }
 
       it "updates the requested team" do
+        valid_attributes = {name: "Eagles"}
         team = Team.create! valid_attributes
         put :update, params: {id: team.to_param, team: new_attributes}, session: valid_session
         team.reload
-        skip("Add assertions for updated state")
+        expect(response.status).to eq(200)
       end
 
       it "renders a JSON response with the team" do
+        valid_attributes = {name: "Eagles"}
         team = Team.create! valid_attributes
 
         put :update, params: {id: team.to_param, team: valid_attributes}, session: valid_session
@@ -108,6 +112,8 @@ RSpec.describe TeamsController, type: :controller do
 
     context "with invalid params" do
       it "renders a JSON response with errors for the team" do
+        valid_attributes = {name: "Eagles"}
+        invalid_attributes = {name: ''}
         team = Team.create! valid_attributes
 
         put :update, params: {id: team.to_param, team: invalid_attributes}, session: valid_session
@@ -119,11 +125,12 @@ RSpec.describe TeamsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested team" do
+      valid_attributes = {name: "Eagles"}
       team = Team.create! valid_attributes
       expect {
         delete :destroy, params: {id: team.to_param}, session: valid_session
       }.to change(Team, :count).by(-1)
     end
   end
-
+end
 end

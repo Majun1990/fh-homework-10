@@ -22,18 +22,18 @@ require 'rails_helper'
 # expectations of assigns and templates rendered. These features have been
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
-
-RSpec.describe GamesController, type: :controller do
+module API
+  describe GamesController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # Game. As you add validations to Game, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {name: "Championship", home_team_id: 1, away_team_id: 2}
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {name: "", home_team_id: -2, away_team_id: -1}
   }
 
   # This should return the minimal set of values that should be in the session
@@ -43,7 +43,13 @@ RSpec.describe GamesController, type: :controller do
 
   describe "GET #index" do
     it "returns a success response" do
-      game = Game.create! valid_attributes
+      home_team = Team.create!(name: "Tigers")
+      away_team = Team.create!(name: "Gamecocks")
+      game = Game.create!(
+        name: "Semi-finals",
+        home_team_id: home_team.id,
+        away_team_id: away_team.id
+      )
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
@@ -51,7 +57,13 @@ RSpec.describe GamesController, type: :controller do
 
   describe "GET #show" do
     it "returns a success response" do
-      game = Game.create! valid_attributes
+      home_team = Team.create!(name: "Tigers")
+      away_team = Team.create!(name: "Gamecocks")
+      game = Game.create!(
+        name: "Semi-finals",
+        home_team_id: home_team.id,
+        away_team_id: away_team.id
+      )
       get :show, params: {id: game.to_param}, session: valid_session
       expect(response).to be_successful
     end
@@ -60,23 +72,39 @@ RSpec.describe GamesController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Game" do
+        home_team = Team.create!(name: "Tigers")
+        away_team = Team.create!(name: "Gamecocks")
+        valid_attributes = {
+          name: "Semi-finals",
+          home_team_id: home_team.id,
+          away_team_id: away_team.id
+        }
         expect {
           post :create, params: {game: valid_attributes}, session: valid_session
         }.to change(Game, :count).by(1)
       end
 
       it "renders a JSON response with the new game" do
-
+        home_team = Team.create!(name: "Tigers")
+        away_team = Team.create!(name: "Gamecocks")
+        valid_attributes = {
+          name: "Semi-finals",
+          home_team_id: home_team.id,
+          away_team_id: away_team.id
+        }
         post :create, params: {game: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(game_url(Game.last))
       end
     end
 
     context "with invalid params" do
       it "renders a JSON response with errors for the new game" do
-
+        invalid_attributes = {
+          name: '',
+          home_team_id: 0,
+          away_team_id: 0
+        }
         post :create, params: {game: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -91,13 +119,32 @@ RSpec.describe GamesController, type: :controller do
       }
 
       it "updates the requested game" do
+        home_team = Team.create!(name: "Tigers")
+        away_team = Team.create!(name: "Gamecocks")
+        valid_attributes = {
+          name: "Semi-finals",
+          home_team_id: home_team.id,
+          away_team_id: away_team.id
+        }
+        new_attributes = {
+          name: "Championship",
+          home_team_id: home_team.id,
+          away_team_id: away_team.id
+        }
         game = Game.create! valid_attributes
         put :update, params: {id: game.to_param, game: new_attributes}, session: valid_session
         game.reload
-        skip("Add assertions for updated state")
+        expect(response.status).to eq(200)
       end
 
       it "renders a JSON response with the game" do
+        home_team = Team.create!(name: "Tigers")
+        away_team = Team.create!(name: "Gamecocks")
+        valid_attributes = {
+          name: "Semi-finals",
+          home_team_id: home_team.id,
+          away_team_id: away_team.id
+        }
         game = Game.create! valid_attributes
 
         put :update, params: {id: game.to_param, game: valid_attributes}, session: valid_session
@@ -108,6 +155,13 @@ RSpec.describe GamesController, type: :controller do
 
     context "with invalid params" do
       it "renders a JSON response with errors for the game" do
+        home_team = Team.create!(name: "Tigers")
+        away_team = Team.create!(name: "Gamecocks")
+        valid_attributes = {
+          name: "Semi-finals",
+          home_team_id: home_team.id,
+          away_team_id: away_team.id
+        }
         game = Game.create! valid_attributes
 
         put :update, params: {id: game.to_param, game: invalid_attributes}, session: valid_session
@@ -119,11 +173,18 @@ RSpec.describe GamesController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested game" do
+      home_team = Team.create!(name: "Tigers")
+      away_team = Team.create!(name: "Gamecocks")
+      valid_attributes = {
+        name: "Semi-finals",
+        home_team_id: home_team.id,
+        away_team_id: away_team.id
+      }
       game = Game.create! valid_attributes
       expect {
         delete :destroy, params: {id: game.to_param}, session: valid_session
       }.to change(Game, :count).by(-1)
     end
   end
-
+end
 end
